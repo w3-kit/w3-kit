@@ -1,0 +1,30 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+.next
+
+# Hardhat files
+cache
+artifacts
+
+# IDE files
+.vscode
+.idea
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files
+dist
+build 
