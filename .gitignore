@@ -7,3 +7,6 @@ dist/
 .env.local
 .DS_Store
 package-lock.json
+
+# Local plans/specs (superpowers)
+docs/superpowers/
