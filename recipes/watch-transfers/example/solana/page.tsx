@@ -56,8 +56,8 @@ function WatchUI() {
       <p style={{ marginTop: "1rem" }}>Live events: {logs.length}</p>
       <div style={{ maxHeight: "500px", overflow: "auto", marginTop: "0.5rem" }}>
         {logs.length === 0 && <p style={{ color: "#666" }}>Waiting for activity...</p>}
-        {logs.map((l, i) => (
-          <div key={i} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0" }}>
+        {logs.map((l) => (
+          <div key={l.signature} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0" }}>
             <p style={{ fontSize: "0.85rem" }}>
               <span style={{ color: "#666" }}>{l.time}</span>{" "}
               <code>{l.signature.slice(0, 16)}...</code>

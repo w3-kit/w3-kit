@@ -32,6 +32,7 @@ export function GetNativeBalance() {
 export function GetTokenBalance() {
   const { address } = useAccount();
   const [tokenAddress, setTokenAddress] = useState("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"); // USDC on Ethereum
+  const [decimals, setDecimals] = useState("6");
 
   const { data: balance, isLoading } = useReadContract({
     address: tokenAddress as `0x${string}`,
@@ -48,9 +49,14 @@ export function GetTokenBalance() {
         onChange={(e) => setTokenAddress(e.target.value)}
         placeholder="Token contract address"
       />
+      <input
+        value={decimals}
+        onChange={(e) => setDecimals(e.target.value)}
+        placeholder="Decimals (e.g., 6)"
+      />
       {isLoading && <p>Loading...</p>}
       {balance !== undefined && (
-        <p>Balance: {formatUnits(balance, 6)} (raw: {balance.toString()})</p>
+        <p>Balance: {formatUnits(balance, Number(decimals))} (raw: {balance.toString()})</p>
       )}
     </div>
   );

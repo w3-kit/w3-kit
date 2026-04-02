@@ -5,17 +5,6 @@ import { PublicKey } from "@solana/web3.js";
 import { getMint } from "@solana/spl-token";
 import { useState, useEffect } from "react";
 
-// ★ Metaplex Token Metadata program address
-const METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
-
-function getMetadataPDA(mint: PublicKey): PublicKey {
-  const [pda] = PublicKey.findProgramAddressSync(
-    [Buffer.from("metadata"), METADATA_PROGRAM_ID.toBuffer(), mint.toBuffer()],
-    METADATA_PROGRAM_ID
-  );
-  return pda;
-}
-
 export function FetchTokenMetadata() {
   const { connection } = useConnection();
   const [mintAddress, setMintAddress] = useState("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"); // USDC

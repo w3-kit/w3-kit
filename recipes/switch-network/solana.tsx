@@ -7,10 +7,10 @@ import { clusterApiUrl, type Cluster } from "@solana/web3.js";
 // Instead, you change the RPC endpoint your app connects to.
 // This requires re-rendering your ConnectionProvider with a new endpoint.
 
-const CLUSTERS: { name: string; cluster: Cluster; endpoint: string }[] = [
-  { name: "Mainnet Beta", cluster: "mainnet-beta", endpoint: clusterApiUrl("mainnet-beta") },
-  { name: "Devnet", cluster: "devnet", endpoint: clusterApiUrl("devnet") },
-  { name: "Testnet", cluster: "testnet", endpoint: clusterApiUrl("testnet") },
+const CLUSTERS: { name: string; cluster: Cluster }[] = [
+  { name: "Mainnet Beta", cluster: "mainnet-beta" },
+  { name: "Devnet", cluster: "devnet" },
+  { name: "Testnet", cluster: "testnet" },
 ];
 
 export function useSolanaCluster() {
@@ -21,7 +21,10 @@ export function useSolanaCluster() {
     if (found) setCurrentCluster(found);
   };
 
-  return { currentCluster, switchCluster, clusters: CLUSTERS };
+  // Derive endpoint from cluster name — always up to date
+  const endpoint = clusterApiUrl(currentCluster.cluster);
+
+  return { currentCluster, endpoint, switchCluster, clusters: CLUSTERS };
 }
 
 export function SwitchCluster() {

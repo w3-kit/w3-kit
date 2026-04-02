@@ -44,8 +44,8 @@ export function WatchTransfers() {
       <input value={tokenAddress} onChange={(e) => setTokenAddress(e.target.value)} placeholder="Token contract address" />
       <p>{transfers.length} transfers captured</p>
       <div style={{ maxHeight: "400px", overflow: "auto" }}>
-        {transfers.map((t, i) => (
-          <div key={i} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0", fontSize: "0.85rem" }}>
+        {transfers.map((t) => (
+          <div key={t.txHash} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0", fontSize: "0.85rem" }}>
             <p>{t.from.slice(0, 10)}... → {t.to.slice(0, 10)}...</p>
             <p><strong>{t.value}</strong> tokens</p>
           </div>

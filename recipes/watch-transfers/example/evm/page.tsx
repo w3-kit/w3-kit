@@ -59,8 +59,8 @@ function WatchUI() {
       <p style={{ marginTop: "1rem" }}>Live transfers: {transfers.length}</p>
       <div style={{ maxHeight: "500px", overflow: "auto", marginTop: "0.5rem" }}>
         {transfers.length === 0 && <p style={{ color: "#666" }}>Waiting for transfers...</p>}
-        {transfers.map((t, i) => (
-          <div key={i} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0" }}>
+        {transfers.map((t) => (
+          <div key={t.txHash} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0" }}>
             <p style={{ fontSize: "0.85rem" }}>
               <span style={{ color: "#666" }}>{t.time}</span>{" "}
               <code>{t.from.slice(0, 8)}...</code> → <code>{t.to.slice(0, 8)}...</code>

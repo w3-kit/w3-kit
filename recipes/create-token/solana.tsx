@@ -1,13 +1,12 @@
 "use client";
 
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { Keypair, Transaction } from "@solana/web3.js";
+import { Keypair, SystemProgram, Transaction } from "@solana/web3.js";
 import {
   createInitializeMintInstruction,
   getMinimumBalanceForRentExemptMint,
   MINT_SIZE,
   TOKEN_PROGRAM_ID,
-  createMint,
 } from "@solana/spl-token";
 import { useState } from "react";
 
@@ -22,19 +21,34 @@ export function CreateToken() {
     if (!publicKey) return;
     setIsPending(true);
     try {
-      // ★ On Solana, creating a token = creating a "mint" account
-      // No contract deployment needed — the SPL Token program handles everything
-      const mint = await createMint(
-        connection,
-        // In wallet-adapter, we need to use sendTransaction pattern instead
-        // This simplified version uses the helper which needs a Keypair signer
-        // See the example/ for the full wallet-adapter compatible version
-        publicKey as any, // Simplified — see example for proper implementation
-        publicKey, // Mint authority
-        publicKey, // Freeze authority (null to disable)
-        Number(decimals),
+      // ★ Generate a new keypair for the mint account
+      const mintKeypair = Keypair.generate();
+      const lamports = await getMinimumBalanceForRentExemptMint(connection);
+
+      const transaction = new Transaction().add(
+        // Create the account
+        SystemProgram.createAccount({
+          fromPubkey: publicKey,
+          newAccountPubkey: mintKeypair.publicKey,
+          space: MINT_SIZE,
+          lamports,
+          programId: TOKEN_PROGRAM_ID,
+        }),
+        // Initialize it as a mint
+        createInitializeMintInstruction(
+          mintKeypair.publicKey,
+          Number(decimals),
+          publicKey, // Mint authority
+          publicKey, // Freeze authority
+        )
       );
-      setMintAddress(mint.toBase58());
+
+      // ★ The mint keypair must also sign (it's a new account being created)
+      const sig = await sendTransaction(transaction, connection, {
+        signers: [mintKeypair],
+      });
+      await connection.confirmTransaction(sig, "confirmed");
+      setMintAddress(mintKeypair.publicKey.toBase58());
     } catch (e) {
       console.error(e);
     } finally {

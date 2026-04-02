@@ -51,8 +51,8 @@ export function WatchTransfers() {
       <input value={mintAddress} onChange={(e) => setMintAddress(e.target.value)} placeholder="Token mint address" />
       <p>{logs.length} events captured</p>
       <div style={{ maxHeight: "400px", overflow: "auto" }}>
-        {logs.map((l, i) => (
-          <div key={i} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0", fontSize: "0.85rem" }}>
+        {logs.map((l) => (
+          <div key={l.signature} style={{ borderBottom: "1px solid #eee", padding: "0.5rem 0", fontSize: "0.85rem" }}>
             <p><strong>Tx:</strong> {l.signature.slice(0, 20)}...</p>
             <p style={{ color: "#666" }}>{new Date(l.timestamp).toLocaleTimeString()}</p>
           </div>
