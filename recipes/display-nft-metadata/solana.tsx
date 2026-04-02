@@ -72,7 +72,10 @@ export function DisplayNFTMetadata() {
       if (!accountInfo) throw new Error("Metadata account not found");
 
       // 2. Parse on-chain name/symbol/URI
-      const parsed = parseMetaplexData(accountInfo.data as Buffer);
+      // accountInfo.data may be Buffer or Uint8Array — guard before passing to parseMetaplexData
+      const rawData = accountInfo.data;
+      if (!Buffer.isBuffer(rawData)) throw new Error("Unexpected account data format");
+      const parsed = parseMetaplexData(rawData);
       if (!parsed) throw new Error("Failed to parse metadata account");
       setOnChainData(parsed);
 

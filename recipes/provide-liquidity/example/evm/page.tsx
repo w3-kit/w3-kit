@@ -23,6 +23,8 @@ function LiquidityUI() {
   const [tokenB, setTokenB] = useState("");
   const [amountA, setAmountA] = useState("");
   const [amountB, setAmountB] = useState("");
+  const [decimalsA, setDecimalsA] = useState("18");
+  const [decimalsB, setDecimalsB] = useState("18");
   const [slippage, setSlippage] = useState("50"); // basis points
   const [txHash, setTxHash] = useState<string | null>(null);
 
@@ -33,6 +35,8 @@ function LiquidityUI() {
       tokenB: tokenB as `0x${string}`,
       amountA,
       amountB,
+      decimalsA: parseInt(decimalsA),
+      decimalsB: parseInt(decimalsB),
       slippageBps: parseInt(slippage),
     });
     setTxHash(receipt.transactionHash);
@@ -48,6 +52,14 @@ function LiquidityUI() {
         <input placeholder="Token B address (0x...)" value={tokenB} onChange={e => setTokenB(e.target.value)} />
         <input placeholder="Amount A" type="number" value={amountA} onChange={e => setAmountA(e.target.value)} />
         <input placeholder="Amount B" type="number" value={amountB} onChange={e => setAmountB(e.target.value)} />
+        <label>
+          Token A decimals:
+          <input type="number" value={decimalsA} onChange={e => setDecimalsA(e.target.value)} style={{ marginLeft: 8, width: 60 }} />
+        </label>
+        <label>
+          Token B decimals:
+          <input type="number" value={decimalsB} onChange={e => setDecimalsB(e.target.value)} style={{ marginLeft: 8, width: 60 }} />
+        </label>
         <label>
           Slippage (basis points, e.g. 50 = 0.5%):
           <input type="number" value={slippage} onChange={e => setSlippage(e.target.value)} style={{ marginLeft: 8, width: 70 }} />

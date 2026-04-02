@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useWalletClient, usePublicClient } from "wagmi";
-import { parseUnits, encodeFunctionData } from "viem";
+import { parseUnits } from "viem";
 
 // Generic swap router interface — plug in any AMM router address
 const SWAP_ROUTER_ABI = [
@@ -36,7 +36,9 @@ interface SwapParams {
   tokenOut: `0x${string}`;
   amountIn: string;
   amountOutMin: string;
-  decimals?: number;
+  // ★ Use separate decimals for each token — they can differ (e.g. USDC=6, WETH=18)
+  decimalsIn?: number;
+  decimalsOut?: number;
 }
 
 export function useSwapTokens() {
@@ -50,9 +52,10 @@ export function useSwapTokens() {
     setLoading(true);
     setError(null);
     try {
-      const decimals = params.decimals ?? 18;
-      const amountIn = parseUnits(params.amountIn, decimals);
-      const amountOutMin = parseUnits(params.amountOutMin, decimals);
+      const decimalsIn = params.decimalsIn ?? 18;
+      const decimalsOut = params.decimalsOut ?? 18;
+      const amountIn = parseUnits(params.amountIn, decimalsIn);
+      const amountOutMin = parseUnits(params.amountOutMin, decimalsOut);
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 20);
 
       // Step 1: approve router to spend tokenIn
@@ -78,8 +81,8 @@ export function useSwapTokens() {
         ],
       });
       return await publicClient.waitForTransactionReceipt({ hash: swapTx });
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
       throw e;
     } finally {
       setLoading(false);

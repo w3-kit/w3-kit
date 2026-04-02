@@ -75,8 +75,8 @@ export function useSolanaProvideLiquidity() {
       const sig = await sendTransaction(tx, connection);
       await connection.confirmTransaction(sig, "confirmed");
       return sig;
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
       throw e;
     } finally {
       setLoading(false);

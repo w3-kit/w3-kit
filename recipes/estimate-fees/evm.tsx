@@ -1,10 +1,8 @@
 "use client";
 
-import { createPublicClient, http, formatEther, parseEther } from "viem";
-import { mainnet } from "viem/chains";
+import { usePublicClient } from "wagmi";
+import { formatEther, parseEther } from "viem";
 import { useState } from "react";
-
-const client = createPublicClient({ chain: mainnet, transport: http() });
 
 export interface EvmFeeEstimate {
   gasUnits: bigint;
@@ -19,31 +17,6 @@ export interface EvmFeeEstimate {
   estimatedCostEth: string;
 }
 
-export async function estimateEvmFees(
-  tx: { to: `0x${string}`; data?: `0x${string}`; value?: bigint },
-  from: `0x${string}`
-): Promise<EvmFeeEstimate> {
-  const [gasUnits, feeData] = await Promise.all([
-    client.estimateGas({ ...tx, account: from }),
-    client.estimateFeesPerGas(),
-  ]);
-
-  const { maxFeePerGas, maxPriorityFeePerGas } = feeData;
-
-  // baseFee = maxFee - priorityFee (approximation; exact value is in the latest block)
-  const baseFeePerGas = maxFeePerGas - maxPriorityFeePerGas;
-  const estimatedCostWei = gasUnits * maxFeePerGas;
-
-  return {
-    gasUnits,
-    baseFeePerGas,
-    maxPriorityFeePerGas,
-    maxFeePerGas,
-    estimatedCostWei,
-    estimatedCostEth: formatEther(estimatedCostWei),
-  };
-}
-
 // Helper: convert wei cost to USD given a current ETH price
 export function weiToUsd(wei: bigint, ethPriceUsd: number): string {
   const eth = Number(formatEther(wei));
@@ -52,27 +25,45 @@ export function weiToUsd(wei: bigint, ethPriceUsd: number): string {
 
 // Component: input a transaction → display EIP-1559 fee breakdown
 export function EstimateFees() {
-  const [to, setTo] = useState("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+  const publicClient = usePublicClient();
+  const [to, setTo] = useState("");
   const [value, setValue] = useState("0.001");
-  const [from, setFrom] = useState("0x742d35Cc6634C0532925a3b8D4C9e2eD6f3C76Ea");
+  const [from, setFrom] = useState("");
   const [estimate, setEstimate] = useState<EvmFeeEstimate | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleEstimate = async () => {
+    if (!publicClient || !to || !from) return;
     setIsLoading(true);
     setError(null);
     setEstimate(null);
 
     try {
-      const result = await estimateEvmFees(
-        {
+      const [gasUnits, feeData, block] = await Promise.all([
+        publicClient.estimateGas({
           to: to as `0x${string}`,
           value: parseEther(value || "0"),
-        },
-        from as `0x${string}`
-      );
-      setEstimate(result);
+          account: from as `0x${string}`,
+        }),
+        publicClient.estimateFeesPerGas(),
+        // ★ Read baseFeePerGas directly from the latest block (authoritative source)
+        publicClient.getBlock({ blockTag: "latest" }),
+      ]);
+
+      const { maxFeePerGas, maxPriorityFeePerGas } = feeData;
+      // ★ baseFeePerGas comes from the block header — exact, not derived
+      const baseFeePerGas = block.baseFeePerGas ?? 0n;
+      const estimatedCostWei = gasUnits * maxFeePerGas;
+
+      setEstimate({
+        gasUnits,
+        baseFeePerGas,
+        maxPriorityFeePerGas,
+        maxFeePerGas,
+        estimatedCostWei,
+        estimatedCostEth: formatEther(estimatedCostWei),
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Estimation failed");
     } finally {

@@ -1,6 +1,7 @@
 "use client";
 
-import { Connection, PublicKey } from "@solana/web3.js";
+import { useConnection } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
 import {
   NameRegistryState,
   performReverseLookup,
@@ -8,35 +9,13 @@ import {
 } from "@bonfida/spl-name-service";
 import { useState } from "react";
 
-// ★ SNS (.sol domains) only exists on Solana mainnet — devnet has no registry data
-const connection = new Connection("https://api.mainnet-beta.solana.com");
-
-// Forward: .sol domain → owner address
-// Strips the ".sol" suffix before lookup — the SDK expects just the label
-export async function resolveSnsName(domain: string): Promise<string | null> {
-  try {
-    const { pubkey } = await getDomainKey(domain.replace(".sol", ""));
-    const { registry } = await NameRegistryState.retrieve(connection, pubkey);
-    return registry.owner.toBase58();
-  } catch {
-    return null;
-  }
-}
-
-// Reverse: address → .sol domain
-// Returns null if the address has no registered .sol domain
-export async function reverseResolveSns(address: string): Promise<string | null> {
-  try {
-    const pubkey = new PublicKey(address);
-    const domain = await performReverseLookup(connection, pubkey);
-    return `${domain}.sol`;
-  } catch {
-    return null;
-  }
-}
+// ★ SNS (.sol domains) only exists on Solana mainnet — devnet has no registry data.
+// The connection endpoint is provided by the wallet adapter context (configured at
+// the app level), so the component works correctly in any network environment.
 
 // Component: resolve .sol domain or Solana address
 export function ResolveAddress() {
+  const { connection } = useConnection();
   const [input, setInput] = useState("bonfida.sol");
   const [result, setResult] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,12 +29,16 @@ export function ResolveAddress() {
     try {
       if (input.endsWith(".sol")) {
         // Forward lookup: .sol domain → address
-        const address = await resolveSnsName(input);
-        setResult(address ?? "Domain not registered");
+        // Strips the ".sol" suffix before lookup — the SDK expects just the label
+        const { pubkey } = await getDomainKey(input.replace(".sol", ""));
+        const { registry } = await NameRegistryState.retrieve(connection, pubkey);
+        setResult(registry.owner.toBase58());
       } else {
         // Reverse lookup: address → .sol domain
-        const domain = await reverseResolveSns(input);
-        setResult(domain ?? "No .sol domain for this address");
+        // Returns null if the address has no registered .sol domain
+        const pubkey = new PublicKey(input);
+        const domain = await performReverseLookup(connection, pubkey);
+        setResult(domain ? `${domain}.sol` : "No .sol domain for this address");
       }
     } catch {
       setError("Resolution failed — check the domain or address");

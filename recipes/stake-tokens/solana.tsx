@@ -11,7 +11,8 @@ import {
 } from "@solana/web3.js";
 import { useState } from "react";
 
-const VALIDATOR_VOTE_ACCOUNT = new PublicKey("VOTE_ACCOUNT_PUBKEY");
+// ★ Replace with the actual vote account address of your chosen validator
+const VALIDATOR_VOTE_ACCOUNT_ADDRESS = "";
 
 export function useStakeSol() {
   const { connection } = useConnection();
@@ -21,7 +22,15 @@ export function useStakeSol() {
 
   async function handleStake() {
     if (!publicKey) return;
+    if (!VALIDATOR_VOTE_ACCOUNT_ADDRESS) {
+      setStatus("Error: set VALIDATOR_VOTE_ACCOUNT_ADDRESS to a valid vote account pubkey");
+      return;
+    }
     setStatus("Creating stake account…");
+
+    // ★ Construct inside the handler so an invalid/placeholder address fails at
+    //   runtime (with a clear error) rather than crashing at module load time
+    const validatorVoteAccount = new PublicKey(VALIDATOR_VOTE_ACCOUNT_ADDRESS);
 
     const stakeKeypair = Keypair.generate();
     const lamports = parseFloat(solAmount) * LAMPORTS_PER_SOL;
@@ -41,7 +50,7 @@ export function useStakeSol() {
       StakeProgram.delegate({
         stakePubkey: stakeKeypair.publicKey,
         authorizedPubkey: publicKey,
-        votePubkey: VALIDATOR_VOTE_ACCOUNT,
+        votePubkey: validatorVoteAccount,
       })
     );
 

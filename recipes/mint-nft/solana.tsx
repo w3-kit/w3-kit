@@ -13,13 +13,14 @@ import {
 } from "@solana/spl-token";
 import { useState } from "react";
 
-// ★ This creates an NFT the "raw SPL" way: mint with 0 decimals, supply of 1
-// For full Metaplex metadata (name, image, attributes), see the .learn.md
+// ★ This creates an NFT the "raw SPL" way: mint with 0 decimals, supply of 1.
+// For full Metaplex metadata (name, image, attributes) you need an additional
+// CreateMetadataAccountV3 instruction from @metaplex-foundation/mpl-token-metadata.
+// See the .learn.md for the complete Metaplex flow.
 export function MintNFT() {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const [recipient, setRecipient] = useState("");
-  const [metadataUri, setMetadataUri] = useState("");
   const [txSig, setTxSig] = useState<string | null>(null);
   const [mintAddress, setMintAddress] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
@@ -97,11 +98,6 @@ export function MintNFT() {
         value={recipient}
         onChange={(e) => setRecipient(e.target.value)}
         placeholder="Recipient (default: your wallet)"
-      />
-      <input
-        value={metadataUri}
-        onChange={(e) => setMetadataUri(e.target.value)}
-        placeholder="Metadata URI (ipfs://... or https://...)"
       />
       <button onClick={handleMint} disabled={isPending || !publicKey}>
         {isPending ? "Minting..." : "Mint NFT"}

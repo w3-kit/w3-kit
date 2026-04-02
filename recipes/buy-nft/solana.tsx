@@ -10,19 +10,24 @@ import {
 } from "@solana/spl-token";
 import { useState } from "react";
 
-// ★ On Solana, NFT "buying" is a token account transfer
-// Real marketplaces (Magic Eden, Tensor) use escrow programs
-// This shows the underlying transfer pattern
-export function BuyNFT() {
+// ★ Transfer NFT from the connected wallet to a recipient address.
+// On Solana, NFTs are SPL tokens with 0 decimals and a supply of 1.
+// The connected wallet must own the NFT and signs the transaction.
+//
+// NOTE: Real marketplace "buy" flows (Magic Eden, Tensor) use escrow
+// programs so the seller and buyer can swap atomically without trusting
+// each other. This recipe shows the raw SPL transfer only — useful when
+// you want to gift or move your own NFT.
+export function TransferNFT() {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const [mintAddress, setMintAddress] = useState("");
-  const [sellerAddress, setSellerAddress] = useState("");
+  const [recipientAddress, setRecipientAddress] = useState("");
   const [txSig, setTxSig] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleBuy = async () => {
+  const handleTransfer = async () => {
     if (!publicKey) return;
     setIsPending(true);
     setError(null);
@@ -30,33 +35,31 @@ export function BuyNFT() {
 
     try {
       const mint = new PublicKey(mintAddress);
-      const seller = new PublicKey(sellerAddress);
+      const recipient = new PublicKey(recipientAddress);
 
-      // ★ Source: seller's ATA for this NFT mint
-      const sellerAta = await getAssociatedTokenAddress(mint, seller);
-      // ★ Destination: buyer's ATA (may need to be created)
-      const buyerAta = await getAssociatedTokenAddress(mint, publicKey);
+      // ★ Source: connected wallet's ATA for this NFT mint (the wallet signs)
+      const senderAta = await getAssociatedTokenAddress(mint, publicKey);
+      // ★ Destination: recipient's ATA (may need to be created first)
+      const recipientAta = await getAssociatedTokenAddress(mint, recipient);
 
       const tx = new Transaction();
 
-      // Create buyer's ATA if it doesn't exist
+      // Create recipient's ATA if it doesn't exist yet
       try {
-        await getAccount(connection, buyerAta);
+        await getAccount(connection, recipientAta);
       } catch {
         tx.add(
-          createAssociatedTokenAccountInstruction(publicKey, buyerAta, publicKey, mint)
+          createAssociatedTokenAccountInstruction(publicKey, recipientAta, recipient, mint)
         );
       }
 
-      // ★ Transfer the 1 NFT token from seller to buyer
-      // NOTE: The seller must have approved this transaction (signed off-chain)
-      // In practice this is handled by marketplace escrow programs
+      // ★ Transfer the 1 NFT token — connected wallet (publicKey) is the authority
       tx.add(
         createTransferInstruction(
-          sellerAta,
-          buyerAta,
-          seller, // ★ seller must be the signer (or an approved delegate)
-          1       // transfer 1 NFT
+          senderAta,
+          recipientAta,
+          publicKey, // ★ signer = connected wallet (the NFT owner)
+          1          // transfer 1 NFT
         )
       );
 
@@ -72,12 +75,12 @@ export function BuyNFT() {
 
   return (
     <div>
-      <h2>Buy NFT (Solana)</h2>
-      <p><em>Demonstrates the transfer pattern. Real buying requires marketplace escrow.</em></p>
+      <h2>Transfer NFT (Solana)</h2>
+      <p><em>Transfers an NFT you own to another wallet. You must hold the NFT in your connected wallet.</em></p>
       <input value={mintAddress} onChange={(e) => setMintAddress(e.target.value)} placeholder="NFT mint address" />
-      <input value={sellerAddress} onChange={(e) => setSellerAddress(e.target.value)} placeholder="Seller wallet address" />
-      <button onClick={handleBuy} disabled={isPending || !publicKey}>
-        {isPending ? "Processing..." : "Transfer NFT to Me"}
+      <input value={recipientAddress} onChange={(e) => setRecipientAddress(e.target.value)} placeholder="Recipient wallet address" />
+      <button onClick={handleTransfer} disabled={isPending || !publicKey}>
+        {isPending ? "Transferring..." : "Transfer NFT"}
       </button>
       {txSig && <p>Transfer complete! Tx: {txSig}</p>}
       {error && <p>Error: {error}</p>}

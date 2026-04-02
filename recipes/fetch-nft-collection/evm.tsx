@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useReadContract, usePublicClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { useState } from "react";
 
 // ★ ERC-721 Enumerable ABI — requires contract to implement ERC721Enumerable

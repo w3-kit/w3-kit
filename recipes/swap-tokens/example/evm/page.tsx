@@ -22,6 +22,8 @@ function SwapUI() {
   const [tokenIn, setTokenIn] = useState("");
   const [tokenOut, setTokenOut] = useState("");
   const [amountIn, setAmountIn] = useState("");
+  const [decimalsIn, setDecimalsIn] = useState("18");
+  const [decimalsOut, setDecimalsOut] = useState("18");
   const [slippage, setSlippage] = useState("0.5");
   const [txHash, setTxHash] = useState<string | null>(null);
 
@@ -37,6 +39,8 @@ function SwapUI() {
       tokenOut: tokenOut as `0x${string}`,
       amountIn,
       amountOutMin,
+      decimalsIn: parseInt(decimalsIn),
+      decimalsOut: parseInt(decimalsOut),
     });
     setTxHash(receipt.transactionHash);
   }
@@ -50,6 +54,14 @@ function SwapUI() {
         <input placeholder="Token In address (0x...)" value={tokenIn} onChange={e => setTokenIn(e.target.value)} />
         <input placeholder="Token Out address (0x...)" value={tokenOut} onChange={e => setTokenOut(e.target.value)} />
         <input placeholder="Amount In" type="number" value={amountIn} onChange={e => setAmountIn(e.target.value)} />
+        <label>
+          Token In decimals:
+          <input type="number" value={decimalsIn} onChange={e => setDecimalsIn(e.target.value)} style={{ marginLeft: 8, width: 60 }} />
+        </label>
+        <label>
+          Token Out decimals:
+          <input type="number" value={decimalsOut} onChange={e => setDecimalsOut(e.target.value)} style={{ marginLeft: 8, width: 60 }} />
+        </label>
         <label>
           Slippage tolerance (%):
           <input type="number" value={slippage} onChange={e => setSlippage(e.target.value)} style={{ marginLeft: 8, width: 60 }} />

@@ -1,7 +1,6 @@
 "use client";
 
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseEther } from "viem";
 import { useState } from "react";
 
 // ★ ERC-721 approve + transferFrom pattern

@@ -44,7 +44,9 @@ interface AddLiquidityParams {
   amountA: string;
   amountB: string;
   slippageBps?: number; // basis points, default 50 = 0.5%
-  decimals?: number;
+  // ★ Use separate decimals for each token — they can differ (e.g. USDC=6, WETH=18)
+  decimalsA?: number;
+  decimalsB?: number;
 }
 
 export function useProvideLiquidity() {
@@ -58,10 +60,11 @@ export function useProvideLiquidity() {
     setLoading(true);
     setError(null);
     try {
-      const decimals = params.decimals ?? 18;
+      const decimalsA = params.decimalsA ?? 18;
+      const decimalsB = params.decimalsB ?? 18;
       const slippageBps = params.slippageBps ?? 50;
-      const amountA = parseUnits(params.amountA, decimals);
-      const amountB = parseUnits(params.amountB, decimals);
+      const amountA = parseUnits(params.amountA, decimalsA);
+      const amountB = parseUnits(params.amountB, decimalsB);
       const amountAMin = (amountA * BigInt(10000 - slippageBps)) / BigInt(10000);
       const amountBMin = (amountB * BigInt(10000 - slippageBps)) / BigInt(10000);
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 20);
@@ -91,8 +94,8 @@ export function useProvideLiquidity() {
         ],
       });
       return await publicClient.waitForTransactionReceipt({ hash: tx });
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
       throw e;
     } finally {
       setLoading(false);

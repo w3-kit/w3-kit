@@ -4,6 +4,7 @@
  * Replace STAKING_ADDRESS and STAKING_ABI with your target protocol.
  */
 
+import { useEffect } from "react";
 import { useAccount, useReadContract, useWriteContract,
          useWaitForTransactionReceipt } from "wagmi";
 import { formatUnits } from "viem";
@@ -43,7 +44,7 @@ export function useClaimRewards() {
   }
 
   // Refresh pending balance after successful claim
-  if (claimed) refetch();
+  useEffect(() => { if (claimed) refetch(); }, [claimed, refetch]);
 
   return {
     pendingRewards: pending ? formatUnits(pending, REWARD_DECIMALS) : "0",
