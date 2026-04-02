@@ -32,23 +32,20 @@ export function GetTokenBalance() {
   const [balance, setBalance] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBalance = async () => {
+  useEffect(() => {
     if (!publicKey) return;
     setError(null);
-    try {
-      const mint = new PublicKey(mintAddress);
-      // ★ Each wallet has an "associated token account" (ATA) per token mint
-      const ata = await getAssociatedTokenAddress(mint, publicKey);
-      const account = await getAccount(connection, ata);
-      setBalance(account.amount.toString());
-    } catch (e) {
-      setError("No token account found (balance is 0 or account doesn't exist)");
-      setBalance(null);
-    }
-  };
-
-  useEffect(() => {
-    fetchBalance();
+    (async () => {
+      try {
+        const mint = new PublicKey(mintAddress);
+        const ata = await getAssociatedTokenAddress(mint, publicKey);
+        const account = await getAccount(connection, ata);
+        setBalance(account.amount.toString());
+      } catch {
+        setError("No token account found (balance is 0 or account doesn't exist)");
+        setBalance(null);
+      }
+    })();
   }, [connection, publicKey, mintAddress]);
 
   return (

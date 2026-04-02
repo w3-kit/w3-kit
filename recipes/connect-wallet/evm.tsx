@@ -1,7 +1,7 @@
 "use client";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { injected, walletConnect } from "wagmi/connectors";
+import { injected } from "wagmi/connectors";
 
 export function ConnectWallet() {
   const { address, isConnected } = useAccount();

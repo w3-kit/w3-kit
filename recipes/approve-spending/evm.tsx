@@ -1,7 +1,7 @@
 "use client";
 
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseUnits, formatUnits, maxUint256 } from "viem";
+import { parseUnits, formatUnits } from "viem";
 import { useState } from "react";
 
 const erc20ApproveAbi = [

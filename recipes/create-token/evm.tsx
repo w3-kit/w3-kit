@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useDeployContract, useWaitForTransactionReceipt } from "wagmi";
+import { useAccount } from "wagmi";
 import { useState } from "react";
 
 // ★ Minimal ERC-20 — for production, use OpenZeppelin's full implementation
