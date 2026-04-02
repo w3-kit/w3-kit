@@ -254,4 +254,4 @@ A plain-language reference for web3 terminology. Terms are explained in the cont
 
 ## Z
 
-**Zero-Knowledge Proof (ZK Proof)** — A cryptographic method where one party (the prover) can prove to another (the verifier) that they know a specific piece of information without revealing the information itself. Popular types include **SNARKs** and **STARKs**.
+**Zero-Knowledge Proof (ZKP)** — A cryptographic proof that something is true without revealing the underlying data. Used in ZK rollups (L2s that prove transaction validity) and privacy protocols. zkSync and Scroll are ZK rollup L2s on Ethereum. Common proof systems include **SNARKs** (succinct, require trusted setup) and **STARKs** (transparent, larger proofs).
