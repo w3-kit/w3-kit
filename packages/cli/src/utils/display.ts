@@ -15,7 +15,7 @@ export function formatTable(headers: string[], rows: string[][]): string {
 
   const lines = [
     topBorder,
-    formatRow(headers.map((h) => chalk.bold(h))),
+    "│" + headers.map((h, i) => ` ${chalk.bold(h.padEnd(colWidths[i]))} `).join("│") + "│",
     midBorder,
     ...rows.map(formatRow),
     botBorder,

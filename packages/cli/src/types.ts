@@ -1,7 +1,9 @@
+export type ChainFilter = "evm" | "solana" | "both";
+
 export interface TemplateMeta {
   name: string;
   description: string;
-  chain: "evm" | "solana" | "both";
+  chain: ChainFilter;
   stack: string;
 }
 

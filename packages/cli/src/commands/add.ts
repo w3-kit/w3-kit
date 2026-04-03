@@ -5,10 +5,9 @@ import chalk from "chalk";
 import { writeFileSync, mkdirSync } from "fs";
 import { join, basename, dirname } from "path";
 import { fetchGithubDirectory, fetchDirectoryRecursive } from "../utils/github.js";
-import { detectPackageManager, buildInstallCommand } from "../utils/deps.js";
+import { installDependencies } from "../utils/deps.js";
 import { renderLearnContent } from "../utils/learn.js";
-import { execFileSync } from "child_process";
-import type { RecipeMeta } from "../types.js";
+import type { ChainFilter, RecipeMeta } from "../types.js";
 
 export function parseRecipeMeta(json: string): RecipeMeta {
   return JSON.parse(json) as RecipeMeta;
@@ -16,7 +15,7 @@ export function parseRecipeMeta(json: string): RecipeMeta {
 
 export function resolveRecipeFiles(
   files: { path: string; content: string }[],
-  chain: "evm" | "solana" | "both"
+  chain: ChainFilter
 ): { path: string; content: string }[] {
   return files.filter((f) => {
     const name = basename(f.path);
@@ -76,7 +75,7 @@ async function addRecipe(
     name = response.recipe as string;
   }
 
-  let chain = options.chain as "evm" | "solana" | "both" | undefined;
+  let chain = options.chain as ChainFilter | undefined;
   if (!chain) {
     const response = await prompts({
       type: "select",
@@ -121,16 +120,12 @@ async function addRecipe(
       if ((chain === "solana" || chain === "both") && meta.dependencies.solana) deps.push(...meta.dependencies.solana);
 
       if (deps.length > 0) {
-        const pm = detectPackageManager(process.cwd());
-        const cmd = buildInstallCommand(pm, deps);
-        if (cmd) {
-          const depSpinner = ora(`Installing dependencies (${deps.join(", ")})...`).start();
-          try {
-            execFileSync(cmd.command, cmd.args, { cwd: process.cwd(), stdio: "pipe" });
-            depSpinner.succeed("Dependencies installed");
-          } catch {
-            depSpinner.fail(`Failed to install. Run manually: ${cmd.command} ${cmd.args.join(" ")}`);
-          }
+        const depSpinner = ora(`Installing dependencies (${deps.join(", ")})...`).start();
+        try {
+          installDependencies(process.cwd(), deps);
+          depSpinner.succeed("Dependencies installed");
+        } catch {
+          depSpinner.fail(`Failed to install. Run manually: npm install ${deps.join(" ")}`);
         }
       }
     } catch { /* No valid meta.json — skip deps */ }

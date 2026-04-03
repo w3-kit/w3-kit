@@ -5,7 +5,7 @@ import { formatTable, formatKeyValue, formatJson } from "../utils/display.js";
 
 export function formatChainsTable(chains: Chain[]) {
   const headers = ["Chain", "Chain ID", "Type", "Native Token"];
-  const rows = chains.map((c) => [c.name, String(c.chainId), c.testnet ? "testnet" : "L1", c.nativeCurrency.symbol]);
+  const rows = chains.map((c) => [c.name, String(c.chainId), c.testnet ? "testnet" : c.ecosystem, c.nativeCurrency.symbol]);
   return { headers, rows };
 }
 

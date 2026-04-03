@@ -5,8 +5,8 @@ import chalk from "chalk";
 import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { join, basename, dirname } from "path";
 import { fetchDirectoryRecursive } from "../utils/github.js";
-import { runInstall } from "../utils/deps.js";
-import type { TemplateMeta } from "../types.js";
+import { detectPackageManager, runInstall } from "../utils/deps.js";
+import type { ChainFilter, TemplateMeta } from "../types.js";
 
 const TEMPLATES: TemplateMeta[] = [
   { name: "nextjs-evm", description: "Next.js dApp with wagmi + viem + RainbowKit", chain: "evm", stack: "Next.js + wagmi + viem + RainbowKit" },
@@ -17,7 +17,7 @@ const TEMPLATES: TemplateMeta[] = [
 
 export function filterTemplates(
   templates: TemplateMeta[],
-  chain: "evm" | "solana" | "both"
+  chain: ChainFilter
 ): TemplateMeta[] {
   if (chain === "both") return templates;
   return templates.filter((t) => t.chain === chain);
@@ -52,7 +52,7 @@ async function runInit(
     process.exit(1);
   }
 
-  let chain = options.chain as "evm" | "solana" | "both" | undefined;
+  let chain = options.chain as ChainFilter | undefined;
   if (!chain) {
     const response = await prompts({
       type: "select", name: "chain", message: "Which chain?",
@@ -109,5 +109,7 @@ async function runInit(
     installSpinner.warn("Could not install dependencies. Run manually.");
   }
 
-  console.log(`\n${chalk.green("Project ready!")}\n\n  cd ${name}\n  npm run dev\n`);
+  const pm = detectPackageManager(projectDir);
+  const runCmd = pm === "npm" ? "npm run dev" : `${pm} dev`;
+  console.log(`\n${chalk.green("Project ready!")}\n\n  cd ${name}\n  ${runCmd}\n`);
 }
