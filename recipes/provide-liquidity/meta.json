@@ -1,9 +1,0 @@
-{
-  "name": "provide-liquidity",
-  "description": "Deposit token pairs into on-chain liquidity pools and receive LP tokens representing your share of the pool.",
-  "chains": ["evm", "solana"],
-  "dependencies": {
-    "evm": ["viem"],
-    "solana": ["@solana/web3.js"]
-  }
-}

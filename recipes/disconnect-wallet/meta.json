@@ -1,9 +1,0 @@
-{
-  "name": "disconnect-wallet",
-  "description": "Disconnect a user's wallet from your dApp.",
-  "chains": ["evm", "solana"],
-  "dependencies": {
-    "evm": ["viem"],
-    "solana": ["@solana/web3.js"]
-  }
-}

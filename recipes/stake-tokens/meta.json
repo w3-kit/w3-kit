@@ -1,9 +1,0 @@
-{
-  "name": "stake-tokens",
-  "description": "Stake tokens to earn yield by locking assets in a staking contract (EVM) or delegating SOL to a validator (Solana).",
-  "chains": ["evm", "solana"],
-  "dependencies": {
-    "evm": ["viem"],
-    "solana": ["@solana/web3.js"]
-  }
-}

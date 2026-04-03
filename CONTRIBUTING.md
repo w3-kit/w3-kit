@@ -1,4 +1,4 @@
-# Contributing to w3-kit
+# Contributing to w3-kit CLI
 
 Thanks for wanting to contribute! w3-kit is an open source web3 toolkit and we welcome contributions of all kinds.
 
@@ -6,71 +6,46 @@ Thanks for wanting to contribute! w3-kit is an open source web3 toolkit and we w
 
 ### Pick an Issue
 
-Check the [Issues](https://github.com/w3-kit/w3-kit/issues) tab for tasks labeled:
+Check the [Issues](https://github.com/w3-kit/cli/issues) tab for tasks labeled:
 - `good first issue` — great for first-time contributors
 - `help wanted` — we'd love community help on these
-- `phase-2`, `phase-3`, etc. — larger features broken into phases
 
 ### Getting Started
 
 1. Fork the repo
 2. Clone your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/w3-kit.git
-   cd w3-kit
+   git clone https://github.com/YOUR_USERNAME/cli.git
+   cd cli
    ```
-3. Create a branch:
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Create a branch:
    ```bash
    git checkout -b your-feature-name
    ```
-4. Make your changes
-5. Push and open a PR
-
-### What Can You Contribute?
-
-- **Code** — UI components, CLI features, contract templates, recipes
-- **Education** — `.learn.md` files, guides, glossary terms, cheat sheets
-- **Data** — Chain data, token addresses, protocol ABIs for the registry
-- **Docs** — Fix typos, improve explanations, translate content
-- **Bug reports** — Open an issue with steps to reproduce
+5. Make your changes
+6. Push and open a PR
 
 ### Project Structure
 
 ```
-w3-kit/
-├── packages/
-│   └── registry/       # Chain, token, ABI data (@w3-kit/registry)
-├── ui/                 # React component library (submodule → w3-kit/ui)
-├── contracts/          # Smart contract templates (EVM + Solana)
-├── recipes/            # Copy-paste code snippets
-├── guides/             # Educational content, glossary, cheat sheets
-├── templates/          # Full starter apps
-└── public-website/     # Landing page (submodule → w3-kit/w3-kit-public-website)
+cli/
+├── src/
+│   ├── commands/     # CLI commands (init, add, registry)
+│   ├── utils/        # Shared utilities (GitHub fetch, display, deps)
+│   ├── types.ts      # Shared types
+│   └── index.ts      # Entry point
+├── tests/            # Vitest tests
+├── package.json
+└── tsconfig.json
 ```
-
-### Writing .learn.md Files
-
-Every component, contract, and recipe should have a companion `.learn.md` file. These explain:
-- **What** the technology is (e.g., what is a token swap?)
-- **How** it works under the hood (AMMs, liquidity pools, etc.)
-- **EVM vs Solana** — side-by-side comparison
-- **Security** — what to watch out for
-- **How the component works** — what it does and how to connect it
-
-Write for developers, not investors. Be concrete, not abstract.
-
-### Adding to the Registry
-
-The `@w3-kit/registry` package holds chain and token data. To add a chain or token:
-1. Add the entry to `packages/registry/data/chains.json` or `tokens.json`
-2. Include a `learn` field with a 1-2 sentence explanation
-3. Add/update tests in `packages/registry/tests/`
-4. Run `npm test` in `packages/registry/`
 
 ### Code Style
 
 - TypeScript for all code
-- Tailwind CSS for styling
 - Follow existing patterns in the codebase
 - Keep files focused — one responsibility per file
 - No unnecessary abstractions
@@ -89,6 +64,13 @@ Use conventional commits:
 - Include a clear description of what and why
 - Link to the related issue if there is one
 - Make sure tests pass
+
+## Related Repos
+
+- [@w3-kit/registry](https://github.com/w3-kit/registry) — Chain/token data
+- [@w3-kit/ui](https://github.com/w3-kit/ui) — Component library
+- [w3-kit/learn](https://github.com/w3-kit/learn) — Recipes and guides
+- [w3-kit/contracts](https://github.com/w3-kit/contracts) — Smart contracts
 
 ## Code of Conduct
 
