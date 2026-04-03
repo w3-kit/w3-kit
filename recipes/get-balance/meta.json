@@ -1,0 +1,9 @@
+{
+  "name": "get-balance",
+  "description": "Read native and token balances for a connected wallet.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

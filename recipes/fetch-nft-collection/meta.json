@@ -1,0 +1,9 @@
+{
+  "name": "fetch-nft-collection",
+  "description": "List all NFTs owned by a wallet address — on EVM (ERC-721 Enumerable) or Solana (SPL token accounts filtered for NFTs).",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

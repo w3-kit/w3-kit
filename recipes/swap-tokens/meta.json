@@ -1,0 +1,9 @@
+{
+  "name": "swap-tokens",
+  "description": "Execute token swaps on EVM chains and Solana using generic AMM router interfaces.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

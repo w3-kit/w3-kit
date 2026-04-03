@@ -1,0 +1,9 @@
+{
+  "name": "watch-transfers",
+  "description": "Subscribe to real-time token transfer events on EVM or Solana.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "estimate-fees",
+  "description": "Estimate transaction fees before sending — EIP-1559 breakdown on EVM, base and priority fees on Solana.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

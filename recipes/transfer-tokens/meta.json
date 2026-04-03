@@ -1,0 +1,9 @@
+{
+  "name": "transfer-tokens",
+  "description": "Send native currency (ETH/SOL) or tokens (ERC-20/SPL) to another address.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js", "@solana/spl-token"]
+  }
+}

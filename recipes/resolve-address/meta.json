@@ -1,0 +1,9 @@
+{
+  "name": "resolve-address",
+  "description": "Translate between human-readable names and wallet addresses using ENS (EVM) and SNS (Solana).",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

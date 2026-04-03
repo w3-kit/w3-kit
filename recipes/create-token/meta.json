@@ -1,0 +1,9 @@
+{
+  "name": "create-token",
+  "description": "Create a new token on EVM (ERC-20 contract deployment) or Solana (SPL Token mint account).",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js", "@solana/spl-token"]
+  }
+}

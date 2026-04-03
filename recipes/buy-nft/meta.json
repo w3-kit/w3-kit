@@ -1,0 +1,9 @@
+{
+  "name": "buy-nft",
+  "description": "Demonstrates the NFT purchase flow: approve-then-transfer on EVM (ERC-721), and token account transfer on Solana.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

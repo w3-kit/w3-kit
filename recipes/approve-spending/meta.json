@@ -1,0 +1,8 @@
+{
+  "name": "approve-spending",
+  "description": "Grant or revoke a contract's permission to spend your tokens.",
+  "chains": ["evm"],
+  "dependencies": {
+    "evm": ["viem"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "fetch-metadata",
+  "description": "Read a token's name, symbol, decimals, and supply.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

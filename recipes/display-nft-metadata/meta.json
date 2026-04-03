@@ -1,0 +1,9 @@
+{
+  "name": "display-nft-metadata",
+  "description": "Fetch and render NFT metadata — name, image, and attributes — from EVM (ERC-721 tokenURI) or Solana (Metaplex metadata PDA).",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

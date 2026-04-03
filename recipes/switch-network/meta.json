@@ -1,0 +1,8 @@
+{
+  "name": "switch-network",
+  "description": "Switch between blockchain networks on EVM (wallet-level chain switch) or Solana clusters (app-level RPC endpoint change).",
+  "chains": ["evm"],
+  "dependencies": {
+    "evm": ["viem"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "mint-nft",
+  "description": "Mint a new NFT on EVM (ERC-721) or Solana (SPL Token with 0 decimals and Metaplex metadata).",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js", "@metaplex-foundation/js"]
+  }
+}

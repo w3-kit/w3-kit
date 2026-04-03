@@ -1,0 +1,9 @@
+{
+  "name": "connect-wallet",
+  "description": "Connect a user's wallet to your dApp.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "sign-message",
+  "description": "Sign an arbitrary message with the user's wallet to prove ownership without an on-chain transaction.",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}

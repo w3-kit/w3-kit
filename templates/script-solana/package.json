@@ -1,0 +1,17 @@
+{
+  "name": "my-solana-script",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.3.3"
+  }
+}

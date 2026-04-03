@@ -1,0 +1,9 @@
+{
+  "name": "claim-rewards",
+  "description": "Claim accumulated staking rewards from a staking contract (EVM) or withdraw from a native stake account (Solana).",
+  "chains": ["evm", "solana"],
+  "dependencies": {
+    "evm": ["viem"],
+    "solana": ["@solana/web3.js"]
+  }
+}
