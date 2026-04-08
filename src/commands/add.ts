@@ -15,7 +15,7 @@ export function parseRecipeMeta(json: string): RecipeMeta {
 
 export function resolveRecipeFiles(
   files: { path: string; content: string }[],
-  chain: ChainFilter
+  chain: ChainFilter,
 ): { path: string; content: string }[] {
   return files.filter((f) => {
     const name = basename(f.path);
@@ -51,7 +51,7 @@ export function createAddCommand(): Command {
 
 async function addRecipe(
   name: string | undefined,
-  options: { chain?: string; learn: boolean }
+  options: { chain?: string; learn: boolean },
 ): Promise<void> {
   if (!name) {
     const spinner = ora("Fetching available recipes...").start();
@@ -71,7 +71,10 @@ async function addRecipe(
       choices: recipes.map((r) => ({ title: r, value: r })),
     });
 
-    if (!response.recipe) { console.log("Cancelled."); return; }
+    if (!response.recipe) {
+      console.log("Cancelled.");
+      return;
+    }
     name = response.recipe as string;
   }
 
@@ -88,7 +91,10 @@ async function addRecipe(
       ],
     });
     chain = response.chain;
-    if (!chain) { console.log("Cancelled."); return; }
+    if (!chain) {
+      console.log("Cancelled.");
+      return;
+    }
   }
 
   const spinner = ora(`Downloading ${name}...`).start();
@@ -116,8 +122,10 @@ async function addRecipe(
     try {
       const meta = parseRecipeMeta(metaFile.content);
       const deps: string[] = [];
-      if ((chain === "evm" || chain === "both") && meta.dependencies.evm) deps.push(...meta.dependencies.evm);
-      if ((chain === "solana" || chain === "both") && meta.dependencies.solana) deps.push(...meta.dependencies.solana);
+      if ((chain === "evm" || chain === "both") && meta.dependencies.evm)
+        deps.push(...meta.dependencies.evm);
+      if ((chain === "solana" || chain === "both") && meta.dependencies.solana)
+        deps.push(...meta.dependencies.solana);
 
       if (deps.length > 0) {
         const depSpinner = ora(`Installing dependencies (${deps.join(", ")})...`).start();
@@ -128,7 +136,9 @@ async function addRecipe(
           depSpinner.fail(`Failed to install. Run manually: npm install ${deps.join(" ")}`);
         }
       }
-    } catch { /* No valid meta.json — skip deps */ }
+    } catch {
+      /* No valid meta.json — skip deps */
+    }
   }
 
   if (options.learn) {
@@ -150,7 +160,10 @@ async function addContract(name: string | undefined): Promise<void> {
       process.exit(1);
     }
 
-    if (contracts.length === 0) { console.log("No contract templates available yet."); return; }
+    if (contracts.length === 0) {
+      console.log("No contract templates available yet.");
+      return;
+    }
 
     const response = await prompts({
       type: "autocomplete",
@@ -159,7 +172,10 @@ async function addContract(name: string | undefined): Promise<void> {
       choices: contracts.map((c) => ({ title: c, value: c })),
     });
 
-    if (!response.contract) { console.log("Cancelled."); return; }
+    if (!response.contract) {
+      console.log("Cancelled.");
+      return;
+    }
     name = response.contract as string;
   }
 
