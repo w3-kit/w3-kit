@@ -13,14 +13,18 @@ export function detectPackageManager(projectDir: string): PackageManager {
 
 export function buildInstallCommand(
   pm: PackageManager,
-  packages: string[]
+  packages: string[],
 ): { command: string; args: string[] } | null {
   if (packages.length === 0) return null;
   switch (pm) {
-    case "npm": return { command: "npm", args: ["install", ...packages] };
-    case "pnpm": return { command: "pnpm", args: ["add", ...packages] };
-    case "yarn": return { command: "yarn", args: ["add", ...packages] };
-    case "bun": return { command: "bun", args: ["add", ...packages] };
+    case "npm":
+      return { command: "npm", args: ["install", ...packages] };
+    case "pnpm":
+      return { command: "pnpm", args: ["add", ...packages] };
+    case "yarn":
+      return { command: "yarn", args: ["add", ...packages] };
+    case "bun":
+      return { command: "bun", args: ["add", ...packages] };
   }
 }
 

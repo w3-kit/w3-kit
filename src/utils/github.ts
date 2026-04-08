@@ -30,21 +30,24 @@ export async function fetchGithubFile(downloadUrl: string): Promise<string> {
   return response.text();
 }
 
-export async function fetchDirectoryRecursive(repo: string, path: string): Promise<{ path: string; content: string }[]> {
+export async function fetchDirectoryRecursive(
+  repo: string,
+  path: string,
+): Promise<{ path: string; content: string }[]> {
   const entries = await fetchGithubDirectory(repo, path);
 
   const filePromises = entries
-    .filter((e): e is GithubFile & { download_url: string } => e.type === "file" && e.download_url !== null)
+    .filter(
+      (e): e is GithubFile & { download_url: string } =>
+        e.type === "file" && e.download_url !== null,
+    )
     .map((e) => fetchGithubFile(e.download_url).then((content) => ({ path: e.path, content })));
 
   const dirPromises = entries
     .filter((e) => e.type === "dir")
     .map((e) => fetchDirectoryRecursive(repo, e.path));
 
-  const [files, ...nestedArrays] = await Promise.all([
-    Promise.all(filePromises),
-    ...dirPromises,
-  ]);
+  const [files, ...nestedArrays] = await Promise.all([Promise.all(filePromises), ...dirPromises]);
 
   return [...files, ...nestedArrays.flat()];
 }

@@ -2,9 +2,7 @@ import chalk from "chalk";
 
 export function formatTable(headers: string[], rows: string[][]): string {
   const allRows = [headers, ...rows];
-  const colWidths = headers.map((_, i) =>
-    Math.max(...allRows.map((row) => (row[i] || "").length))
-  );
+  const colWidths = headers.map((_, i) => Math.max(...allRows.map((row) => (row[i] || "").length)));
 
   const topBorder = "┌" + colWidths.map((w) => "─".repeat(w + 2)).join("┬") + "┐";
   const midBorder = "├" + colWidths.map((w) => "─".repeat(w + 2)).join("┼") + "┤";
@@ -26,9 +24,7 @@ export function formatTable(headers: string[], rows: string[][]): string {
 
 export function formatKeyValue(pairs: [string, string][]): string {
   const maxKeyLen = Math.max(...pairs.map(([k]) => k.length));
-  return pairs
-    .map(([key, value]) => `${chalk.bold(key.padEnd(maxKeyLen))}  ${value}`)
-    .join("\n");
+  return pairs.map(([key, value]) => `${chalk.bold(key.padEnd(maxKeyLen))}  ${value}`).join("\n");
 }
 
 export function formatJson(data: unknown): string {
