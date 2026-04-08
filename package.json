@@ -15,7 +15,10 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "lint": "eslint src/",
+    "format:check": "prettier --check src/",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@w3-kit/registry": "^0.2.0",
@@ -28,6 +31,9 @@
   },
   "devDependencies": {
     "@types/prompts": "^2.4.9",
+    "@w3-kit/config": "^0.1.0",
+    "eslint": "^10.2.0",
+    "prettier": "^3.8.1",
     "typescript": "^5.3.3",
     "vitest": "^3.1.1"
   }
