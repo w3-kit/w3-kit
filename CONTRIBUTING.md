@@ -65,6 +65,32 @@ Use conventional commits:
 - Link to the related issue if there is one
 - Make sure tests pass
 
+## Local development
+
+```bash
+git clone https://github.com/YOUR_USERNAME/cli.git
+cd cli
+npm install
+```
+
+### Run the dev build
+
+```bash
+npm run dev
+```
+
+### Run tests
+
+```bash
+npm test
+```
+
+### Run all CI checks locally
+
+```bash
+npm run typecheck && npm run lint && npm run format:check && npm run build && npm test
+```
+
 ## Related Repos
 
 - [@w3-kit/registry](https://github.com/w3-kit/registry) — Chain/token data

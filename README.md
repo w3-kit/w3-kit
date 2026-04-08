@@ -1,5 +1,9 @@
 # w3-kit
 
+[![CI](https://github.com/w3-kit/cli/actions/workflows/ci.yml/badge.svg)](https://github.com/w3-kit/cli/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/w3-kit)](https://www.npmjs.com/package/w3-kit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
 CLI toolkit for web3 development.
 
 ## Install
