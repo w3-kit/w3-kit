@@ -34,7 +34,7 @@
     "@w3-kit/config": "^0.1.0",
     "eslint": "^10.2.0",
     "prettier": "^3.8.1",
-    "typescript": "^5.3.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.7"
   }
 }
