@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/prompts": "^2.4.9",
-    "@w3-kit/config": "^0.1.0",
+    "@w3-kit/config": "^0.2.0",
     "eslint": "^10.2.0",
     "prettier": "^3.8.1",
     "typescript": "^6.0.3",
